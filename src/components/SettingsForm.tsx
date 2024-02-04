@@ -6,6 +6,9 @@ import { LS_SETTINGS_KEY } from '../config'
 import { getSettingsFromLocalStorage } from '../shared/helpers/helper'
 import { Settings } from '../shared/interfaces/interfaces'
 import arrow from '../assets/arrow.svg'
+import { useDispatch, useSelector } from 'react-redux'
+import {setLogin, setRepo, setBlacklist} from '../store/SettingsFormStore/settingsFormActions'
+import { getSettingsFormBlacklist, getSettingsFormLogin, getSettingsFormRepo } from '../store/SettingsFormStore/getSettingsFormData'
 
 interface SettingsFormProps {
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
@@ -14,17 +17,20 @@ interface SettingsFormProps {
 }
 
 const SettingsForm = ({ onSubmit, loading }: SettingsFormProps) => {
+  const dispatch = useDispatch();
+
+  const login = useSelector(getSettingsFormLogin);
+  const repo = useSelector(getSettingsFormRepo);
+  const blacklist = useSelector(getSettingsFormBlacklist);
+
   const [isShow, setIsShow] = useState(true)
-  const [repo, setRepo] = useState('')
-  const [login, setLogin] = useState('')
-  const [blacklist, setBlacklist] = useState('')
 
   useEffect(() => {
     const settings = getSettingsFromLocalStorage(LS_SETTINGS_KEY) as Settings
-
-    setRepo(settings?.repo)
-    setLogin(settings?.login)
-    setBlacklist(settings?.blacklist)
+    
+    dispatch(setRepo(settings?.repo))
+    dispatch(setLogin(settings?.login))
+    dispatch(setBlacklist(settings?.blacklist))
   }, [])
 
   const onShowClick = (e: React.MouseEvent) => {
@@ -57,21 +63,21 @@ const SettingsForm = ({ onSubmit, loading }: SettingsFormProps) => {
               name='login'
               label='Type login:'
               placeholder='Type login...'
-              onChange={setLogin}
+              onChange={(value) => dispatch(setLogin(value))}
               value={login}
             />
             <Input
               name='repo'
               label='Type repository name:'
               placeholder='Type repository name...'
-              onChange={setRepo}
+              onChange={(value) => dispatch(setRepo(value))}
               value={repo}
             />
             <Textarea
               name='blacklist'
               label='Blocked user separated by space:'
               placeholder='Type blocked user separated by space...'
-              onChange={setBlacklist}
+              onChange={(value) => dispatch(setBlacklist(value))}
               value={blacklist}
             />
           </div>
