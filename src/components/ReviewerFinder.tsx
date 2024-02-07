@@ -17,7 +17,7 @@ import {
 
 const ReviewerFinder = () => {
   const [message, setMessage] = useState('Click Find to search!')
-  const [winner, setWinner] = useState({})
+  const [winner, setWinner] = useState<contributorData | null>(null)
   const [loading, setLoading] = useState(false)
 
   const setRandomReviewer = async ({ login, repo, blacklist }: Settings) => {
@@ -28,7 +28,7 @@ const ReviewerFinder = () => {
 
     saveSettingsInLocalStorage(LS_SETTINGS_KEY, { login, repo, blacklist })
 
-    let reviewers: contributorData[] | [] = []
+    let reviewers: contributorData[] = [];
 
     try {
       reviewers = await getReviewers(login, repo)
@@ -41,7 +41,7 @@ const ReviewerFinder = () => {
     const blockedUsers = [login, ...blacklist.split(' ')]
 
     const filteredReviewers = reviewers.filter(
-      reviewer => !blockedUsers.some(item => item === reviewer.login)
+      reviewer => !blockedUsers.includes(reviewer.login)
     )
 
     if (filteredReviewers.length === 0) {
@@ -75,7 +75,7 @@ const ReviewerFinder = () => {
   return (
     <>
       <h1 className='mb3 mt3'>Find Reviewer</h1>
-      <ReviewerResult user={winner as contributorData} />
+      {winner && <ReviewerResult user={winner} />}
       <div className='message-box mb3 mt3'>{message}</div>
       <SettingsForm onSubmit={onSubmitHundler} loading={loading} />
     </>
