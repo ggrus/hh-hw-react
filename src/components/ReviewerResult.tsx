@@ -1,8 +1,8 @@
-import { contributorData } from '../shared/interfaces/interfaces'
+import { ContributorData } from '../shared/interfaces/interfaces'
 import DefaultAvatar from '../assets/avatar.png'
 
 interface ReviewerResultProps {
-  user: contributorData
+  user: ContributorData
 }
 
 const ReviewerResult = ({ user }: ReviewerResultProps) => {
@@ -11,7 +11,7 @@ const ReviewerResult = ({ user }: ReviewerResultProps) => {
       <div className='avatar-box'>
         <img
           className='avatar-box__image'
-          src={user.avatar_url || DefaultAvatar}
+          src={user.avatarUrl || DefaultAvatar}
           alt='avatar'
         />
       </div>

@@ -1,5 +1,5 @@
 import { GITHUB_API_URL } from "../../config";
-import { Settings, contributorData } from "../interfaces/interfaces";
+import { Settings, ContributorDataFromAPI } from "../interfaces/interfaces";
 
 // eslint-disable-next-line  @typescript-eslint/no-explicit-any
 export const getData = async (url: string): Promise<any> => {
@@ -24,7 +24,7 @@ export const getData = async (url: string): Promise<any> => {
 
 
 
-export const getReviewers = async (login: string, repo: string): Promise<contributorData[]> => {
+export const getReviewers = async (login: string, repo: string): Promise<ContributorDataFromAPI[]> => {
   return await getData(`${GITHUB_API_URL}/repos/${login}/${repo}/contributors`)
 }
 

@@ -1,8 +1,8 @@
 import { combineReducers, createStore } from 'redux';
-import { SettingsFormReducer } from './SettingsFormStore/settingsFormReducer'
+import { ReviewerFinderReducer } from './ReviewerFinderStore/reviewerFinderReducer'
 
 const rootReducer = combineReducers({
-  SettingsForm: SettingsFormReducer,
+  ReviewerFinder: ReviewerFinderReducer,
 })
 
 const store = createStore(rootReducer);

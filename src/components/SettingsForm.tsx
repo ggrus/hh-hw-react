@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import Button from './Button'
 import Input from './Input'
 import Textarea from './Textarea'
@@ -6,9 +7,16 @@ import { LS_SETTINGS_KEY } from '../config'
 import { getSettingsFromLocalStorage } from '../shared/helpers/helper'
 import { Settings } from '../shared/interfaces/interfaces'
 import arrow from '../assets/arrow.svg'
-import { useDispatch, useSelector } from 'react-redux'
-import {setLogin, setRepo, setBlacklist} from '../store/SettingsFormStore/settingsFormActions'
-import { getSettingsFormBlacklist, getSettingsFormLogin, getSettingsFormRepo } from '../store/SettingsFormStore/getSettingsFormData'
+import {
+  setLogin,
+  setRepo,
+  setBlacklist,
+} from '../store/ReviewerFinderStore/reviewerFinderActions'
+import {
+  getBlacklist,
+  getLogin,
+  getRepo,
+} from '../store/ReviewerFinderStore/getReviewerFinderData'
 
 interface SettingsFormProps {
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any
@@ -17,17 +25,17 @@ interface SettingsFormProps {
 }
 
 const SettingsForm = ({ onSubmit, loading }: SettingsFormProps) => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
 
-  const login = useSelector(getSettingsFormLogin);
-  const repo = useSelector(getSettingsFormRepo);
-  const blacklist = useSelector(getSettingsFormBlacklist);
+  const login = useSelector(getLogin)
+  const repo = useSelector(getRepo)
+  const blacklist = useSelector(getBlacklist)
 
   const [isShow, setIsShow] = useState(true)
 
   useEffect(() => {
     const settings = getSettingsFromLocalStorage(LS_SETTINGS_KEY) as Settings
-    
+
     dispatch(setRepo(settings?.repo))
     dispatch(setLogin(settings?.login))
     dispatch(setBlacklist(settings?.blacklist))
@@ -40,9 +48,7 @@ const SettingsForm = ({ onSubmit, loading }: SettingsFormProps) => {
 
   const onSubmitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    const data = new FormData(e.target as HTMLFormElement)
-    const formObject = Object.fromEntries(data.entries())
-    onSubmit(formObject)
+    onSubmit({ login, repo, blacklist })
   }
 
   return (
@@ -63,21 +69,21 @@ const SettingsForm = ({ onSubmit, loading }: SettingsFormProps) => {
               name='login'
               label='Type login:'
               placeholder='Type login...'
-              onChange={(value) => dispatch(setLogin(value))}
+              onChange={value => dispatch(setLogin(value))}
               value={login}
             />
             <Input
               name='repo'
               label='Type repository name:'
               placeholder='Type repository name...'
-              onChange={(value) => dispatch(setRepo(value))}
+              onChange={value => dispatch(setRepo(value))}
               value={repo}
             />
             <Textarea
               name='blacklist'
               label='Blocked user separated by space:'
               placeholder='Type blocked user separated by space...'
-              onChange={(value) => dispatch(setBlacklist(value))}
+              onChange={value => dispatch(setBlacklist(value))}
               value={blacklist}
             />
           </div>

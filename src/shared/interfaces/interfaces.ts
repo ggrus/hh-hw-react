@@ -8,9 +8,15 @@ export interface ControlProps extends PropsWithChildren {
   onChange: (value: string) => void
 }
 
-export interface contributorData {
+export interface ContributorDataFromAPI {
   avatar_url: string
   html_url: string
+  login: string
+}
+
+export interface ContributorData {
+  avatarUrl: string
+  htmlUrl: string
   login: string
 }
 
